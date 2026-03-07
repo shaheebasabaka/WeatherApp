@@ -1,78 +1,84 @@
 package com.weatherapp.feature.search.presentation.search
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.weatherapp.core.ui.components.AppBackground
+import com.weatherapp.core.ui.spacing.Spacing
+import com.weatherapp.core.ui.theme.*
 import com.weatherapp.feature.search.presentation.components.search.CityCard
 import com.weatherapp.feature.search.presentation.components.search.SearchBar
-
-data class City(
-    val name: String,
-    val temp: String,
-    val condition: String
-)
-
-val dummyCities = listOf(
-    City("London", "15°C", "Cloudy"),
-    City("New York", "22°C", "Sunny"),
-    City("Tokyo", "18°C", "Rainy"),
-    City("Paris", "17°C", "Partly Cloudy"),
-    City("Sydney", "25°C", "Clear")
-)
-
+import androidx.compose.ui.text.style.TextAlign
 @Composable
-fun SearchScreen() {
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.White
-    ) {
-
-        Column(
+fun SearchScreen(
+    onNavigateToLocations: () -> Unit,
+    viewModel: SearchViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsState()
+    AppBackground {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 24.dp)
+                .padding(Spacing.L)
+                .clip(RoundedCornerShape(32.dp))
+                .background(BackgroundLight)
         ) {
-
-            Text(
-                text = "Search",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Find cities worldwide",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SearchBar()
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            LazyColumn {
-                items(dummyCities) { city ->
-                    CityCard(
-                        cityName = city.name,
-                        temperature = city.temp,
-                        condition = city.condition
-                    )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(Spacing.XL)
+            ) {
+                Text(
+                    text = "1. Search Screen",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = TextPrimary,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(Spacing.XL))
+                Text(
+                    text = "Search",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = TextPrimary
+                )
+                Spacer(modifier = Modifier.height(Spacing.S))
+                Text(
+                    text = "Find cities worldwide",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextSecondary
+                )
+                Spacer(modifier = Modifier.height(Spacing.L))
+                SearchBar(
+                    onSearch = { city ->
+                        viewModel.searchCity(city)
+                    }
+                )
+                Spacer(modifier = Modifier.height(Spacing.XL))
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(Spacing.L),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(state.results) { city ->
+                        CityCard(
+                            cityName = city.name,
+                            temperature = "${city.temperature}°",
+                            condition = city.condition,
+                            onAddClick = {
+                                viewModel.addCity(city)
+                                onNavigateToLocations()
+                            }
+                        )
+                    }
                 }
             }
         }

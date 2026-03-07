@@ -2,33 +2,59 @@ package com.weatherapp.feature.search.presentation.components.search
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.input.ImeAction
+import com.weatherapp.core.ui.spacing.Spacing
 
 @Composable
-fun SearchBar() {
+fun SearchBar(
+    onSearch: (String) -> Unit
+
+) {
+    var query by remember { mutableStateOf("") }
+    var isFocused by remember { mutableStateOf(false) }
 
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = query,
+        onValueChange = { query = it },
         placeholder = {
-            Text("Enter city name...")
+            Text(
+                "Enter city name...",
+                style = MaterialTheme.typography.bodyMedium
+            )
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = null
+                contentDescription = "Search Icon"
             )
         },
         modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        singleLine = true
+            .fillMaxWidth()
+            .onFocusChanged { isFocused = it.isFocused },
+        shape = MaterialTheme.shapes.medium,
+        singleLine = true,
+        textStyle = MaterialTheme.typography.bodyMedium,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                if (query.isNotBlank()) {
+                    onSearch(query)
+                }
+            }
+        )
     )
 }

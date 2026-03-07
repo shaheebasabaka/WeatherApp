@@ -17,5 +17,6 @@ rootProject.name = "WeatherApp"
 include(":app")
 include(":core:network")
 include(":core:ui")
-include(":feature")
 include(":feature:search")
+include(":feature:locations")
+include(":feature:detail")

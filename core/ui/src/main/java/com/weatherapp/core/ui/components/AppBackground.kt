@@ -6,24 +6,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import com.weatherapp.core.ui.theme.VioletDark
-import com.weatherapp.core.ui.theme.VioletLight
+import com.weatherapp.core.ui.theme.PrimaryBlue
 
 @Composable
 fun AppBackground(
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val gradient = Brush.verticalGradient(
-        colors = listOf(
-            VioletDark,
-            VioletLight
-        )
-    )
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .background(gradient)
+            .background(PrimaryBlue)
     ) {
         content()
     }
