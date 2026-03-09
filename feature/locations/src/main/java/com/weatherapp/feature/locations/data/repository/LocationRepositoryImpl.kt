@@ -39,7 +39,7 @@ class LocationsRepositoryImpl @Inject constructor(
         ).flow.map { pagingData ->
             pagingData.map { entity ->
                 SavedLocation(
-                    id = entity.id,
+                    id = entity.cityId,
                     cityName = entity.cityName,
                     temperature = entity.temperature,
                     condition = entity.condition,

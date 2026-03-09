@@ -21,14 +21,19 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
+    private var lastQuery: String = ""
+
     fun searchCity(city: String) {
+        lastQuery = city
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             try {
                 val result = searchCityUseCase(city)
 
                 println("API RESULT = $result")
 
                 _uiState.value = _uiState.value.copy(
+                    isLoading = false,
                     results = listOf(result),
                     error = null
                 )
@@ -39,10 +44,17 @@ class SearchViewModel @Inject constructor(
                 println("ERROR = ${e.message}")
 
                 _uiState.value = _uiState.value.copy(
+                    isLoading = false,
                     results = emptyList(),
                     error = e.message ?: "Something went wrong"
                 )
             }
+        }
+    }
+
+    fun retry() {
+        if (lastQuery.isNotBlank()) {
+            searchCity(lastQuery)
         }
     }
 

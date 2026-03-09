@@ -33,7 +33,8 @@ abstract class LocationsModule {
                 context,
                 WeatherDatabase::class.java,
                 "weather_database"
-            ).build()
+            ).fallbackToDestructiveMigration()
+             .build()
         }
 
         @Provides

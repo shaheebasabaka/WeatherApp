@@ -57,7 +57,7 @@ fun WeatherCard(
                     .padding(Spacing.M)
             ) {
 
-                // 🔥 CITY + TEMPERATURE ROW
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -102,7 +102,7 @@ fun WeatherCard(
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                // 🌤 CONDITION
+                //  CONDITION
                 Text(
                     text = condition,
                     style = MaterialTheme.typography.bodyMedium,

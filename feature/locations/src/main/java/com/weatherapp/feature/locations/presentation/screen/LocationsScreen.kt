@@ -2,7 +2,6 @@ package com.weatherapp.feature.locations.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -34,14 +33,15 @@ fun LocationsScreen(
 
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .padding(Spacing.L)
+            .fillMaxWidth()
             .clip(RoundedCornerShape(32.dp))
             .background(BackgroundLight)
     ) {
 
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Spacing.XL)
         ) {
 
             Text(
@@ -60,74 +60,64 @@ fun LocationsScreen(
 
             Spacer(modifier = Modifier.height(Spacing.L))
 
-            PullToRefreshBox(
-                state = refreshState,
-                isRefreshing = pagingItems.loadState.refresh is androidx.paging.LoadState.Loading,
-                onRefresh = { pagingItems.refresh() },
-                modifier = Modifier.fillMaxSize()
-            ) {
+            if (pagingItems.loadState.refresh is androidx.paging.LoadState.Loading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else if (pagingItems.itemCount == 0) {
+                EmptyLocationsState()
+            } else {
 
-                if (pagingItems.itemCount == 0 &&
-                    pagingItems.loadState.refresh !is androidx.paging.LoadState.Loading
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Spacing.M)
                 ) {
-                    EmptyLocationsState()
-                } else {
+                    for (index in 0 until pagingItems.itemCount) {
+                        pagingItems[index]?.let { location ->
 
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.M)
-                    ) {
+                            val dismissState = rememberSwipeToDismissBoxState()
 
-                        items(pagingItems.itemCount) { index ->
+                            SwipeToDismissBox(
+                                state = dismissState,
 
-                            pagingItems[index]?.let { location ->
-
-                                val dismissState = rememberSwipeToDismissBoxState()
-
-                                SwipeToDismissBox(
-                                    state = dismissState,
-
-                                    backgroundContent = {
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .clip(RoundedCornerShape(32.dp))
-                                                .background(MaterialTheme.colorScheme.error),
-                                            contentAlignment = Alignment.CenterEnd
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Delete,
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.onError,
-                                                modifier = Modifier.padding(end = Spacing.L)
-                                            )
-                                        }
-                                    },
-
-                                    content = {
-                                        LocationItem(
-                                            location = location,
-                                            modifier = Modifier.fillMaxWidth(),
-
-                                            // ✅ CLICK NAVIGATION
-                                            onClick = {
-                                                onLocationClick(location.id)
-                                            }
+                                backgroundContent = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(32.dp))
+                                            .background(MaterialTheme.colorScheme.error),
+                                        contentAlignment = Alignment.CenterEnd
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.onError,
+                                            modifier = Modifier.padding(end = Spacing.L)
                                         )
                                     }
-                                )
+                                },
 
-                                LaunchedEffect(dismissState.currentValue) {
-                                    if (dismissState.currentValue ==
-                                        SwipeToDismissBoxValue.EndToStart
-                                    ) {
-                                        viewModel.deleteLocation(location.id)
-                                    }
+                                content = {
+                                    LocationItem(
+                                        location = location,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        onClick = {
+                                            onLocationClick(location.id)
+                                        }
+                                    )
+                                }
+                            )
+
+                            LaunchedEffect(dismissState.currentValue) {
+                                if (dismissState.currentValue ==
+                                    SwipeToDismissBoxValue.EndToStart
+                                ) {
+                                    viewModel.deleteLocation(location.id)
                                 }
                             }
                         }
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(Spacing.L))
         }
     }
 }
