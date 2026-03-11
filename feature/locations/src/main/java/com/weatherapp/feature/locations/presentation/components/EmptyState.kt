@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherapp.core.ui.spacing.Spacing
+import com.weatherapp.core.ui.theme.*
 
 @Composable
 fun EmptyLocationsState() {
@@ -31,16 +32,15 @@ fun EmptyLocationsState() {
                 imageVector = Icons.Default.Cloud,
                 contentDescription = "No saved locations",
                 modifier = Modifier.size(80.dp),
-                tint = Color(0xFFBDBDBD)
+                tint = BackgroundPrimary
             )
 
             Spacer(modifier = Modifier.height(Spacing.L))
 
             Text(
                 text = "No saved locations yet",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF212121),
+                style = TitleTextStyle,
+                color = TextPrimary,
                 textAlign = TextAlign.Center
             )
 
@@ -48,8 +48,8 @@ fun EmptyLocationsState() {
 
             Text(
                 text = "Search for cities and add\nthem to your list",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF9E9E9E),
+                style = BodyTextStyle,
+                color = TextSecondary,
                 textAlign = TextAlign.Center
             )
         }

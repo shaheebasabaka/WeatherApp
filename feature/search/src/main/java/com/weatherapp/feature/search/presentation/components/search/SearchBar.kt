@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
 import com.weatherapp.core.ui.spacing.Spacing
+import com.weatherapp.core.ui.theme.*
 
 @Composable
 fun SearchBar(
@@ -27,7 +28,7 @@ fun SearchBar(
         placeholder = {
             Text(
                 "Enter city name...",
-                style = MaterialTheme.typography.bodyMedium
+                style = BodyTextStyle
             )
         },
         leadingIcon = {
@@ -41,7 +42,7 @@ fun SearchBar(
             .onFocusChanged { isFocused = it.isFocused },
         shape = MaterialTheme.shapes.medium,
         singleLine = true,
-        textStyle = MaterialTheme.typography.bodyMedium,
+        textStyle = BodyTextStyle,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.outline

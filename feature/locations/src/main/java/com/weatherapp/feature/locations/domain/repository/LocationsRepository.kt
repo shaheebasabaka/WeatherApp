@@ -12,4 +12,8 @@ interface LocationsRepository {
     suspend fun saveLocation(location: SavedLocation)
 
     suspend fun deleteLocation(id: Int)
+
+    fun getSavedCityIds(): Flow<List<Int>>
+
+    suspend fun refreshAllLocations()
 }

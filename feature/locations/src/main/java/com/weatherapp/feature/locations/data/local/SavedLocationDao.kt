@@ -15,6 +15,9 @@ interface SavedLocationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(location: SavedLocationEntity)
 
+    @Query("SELECT cityId FROM saved_locations")
+    fun getSavedCityIds(): kotlinx.coroutines.flow.Flow<List<Int>>
+
     // NEW SAFE DELETE METHOD
     @Query("DELETE FROM saved_locations WHERE id = :id")
     suspend fun deleteById(id: Int)

@@ -2,8 +2,11 @@ package com.weatherapp.feature.search.presentation.components.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -15,14 +18,15 @@ fun CityCard(
     cityName: String,
     temperature: String,
     condition: String,
+    isAdded: Boolean = false,
     onAddClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = BackgroundPrimary
         )
     ) {
 
@@ -30,14 +34,15 @@ fun CityCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Spacing.L),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
 
                 Text(
                     text = cityName,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = TitleTextStyle,
                     color = TextPrimary
                 )
 
@@ -45,7 +50,7 @@ fun CityCard(
 
                 Text(
                     text = temperature,
-                    style = MaterialTheme.typography.displaySmall,
+                    style = TemperatureTextStyle,
                     color = PrimaryBlue
                 )
 
@@ -53,20 +58,36 @@ fun CityCard(
 
                 Text(
                     text = condition,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BodyTextStyle,
                     color = TextSecondary
                 )
             }
 
-            Button(
-                onClick = onAddClick,
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryBlue,
-                    contentColor = Color.White
-                )
-            ) {
-                Text("+ Add")
+            if (isAdded) {
+                // Show Tick Mark if already added
+                Surface(
+                    color = BackgroundPrimary,
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Added",
+                        tint = SuccessGreen,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            } else {
+                Button(
+                    onClick = onAddClick,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PrimaryBlue,
+                        contentColor = BackgroundPrimary
+                    )
+                ) {
+                    Text("+ Add")
+                }
             }
         }
     }

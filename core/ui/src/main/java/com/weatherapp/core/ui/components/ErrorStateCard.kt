@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.weatherapp.core.ui.theme.*
 @Composable
 fun ErrorStateCard(
     modifier: Modifier = Modifier,
@@ -26,15 +26,13 @@ fun ErrorStateCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xFFFFF0F0)),
+            .background(BackgroundPrimary),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(32.dp)
         ) {
-
-            // Red circle with ! icon
             Box(
                 modifier = Modifier
                     .size(72.dp)
@@ -45,37 +43,31 @@ fun ErrorStateCard(
                 Icon(
                     imageVector = Icons.Default.ErrorOutline,
                     contentDescription = "Error",
-                    tint = Color(0xFFE53935),
+                    tint = ErrorRed,
                     modifier = Modifier.size(48.dp)
                 )
             }
-
             Spacer(modifier = Modifier.height(20.dp))
-
             Text(
                 text = "Connection Failed",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                color = Color(0xFFB71C1C),
+                color = ErrorRed,
                 textAlign = TextAlign.Center
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Unable to fetch weather data.\nPlease check your connection.",
                 fontSize = 14.sp,
-                color = Color(0xFFE53935),
+                color = ErrorRed,
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp
             )
-
             Spacer(modifier = Modifier.height(24.dp))
-
             Button(
                 onClick = onRetry,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE53935)
+                    containerColor = ErrorRed
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -86,9 +78,15 @@ fun ErrorStateCard(
                     text = "Retry",
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = Color.White
+                    color = BackgroundPrimary
                 )
             }
         }
     }
 }
+
+
+
+
+
+

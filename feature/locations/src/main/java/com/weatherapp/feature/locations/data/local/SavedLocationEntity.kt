@@ -1,9 +1,12 @@
 package com.weatherapp.feature.locations.data.local
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity(tableName = "saved_locations")
+@Entity(
+    tableName = "saved_locations",
+    indices = [Index(value = ["cityId"], unique = true)]
+)
 data class SavedLocationEntity(
 
     @PrimaryKey(autoGenerate = true)

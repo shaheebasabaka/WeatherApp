@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.weatherapp.HomeScreen
 import com.weatherapp.feature.detail.presentation.DetailScreen
+import com.weatherapp.feature.locations.presentation.screen.LocationsScreen
+import com.weatherapp.feature.search.presentation.search.SearchScreen
 
 @Composable
 fun AppNavigation() {
@@ -14,17 +15,30 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = "home"
-
+        startDestination = "search"
     ) {
 
-        composable("home") {
-            HomeScreen()
+        composable("search") {
+            SearchScreen(
+                onNavigateToLocations = {
+                    navController.navigate("locations")
+                }
+            )
         }
 
-        // DETAIL SCREEN - still navigates to its own full-screen page
-        composable("detail/{id}") { backStackEntry ->
+        composable("locations") {
+            LocationsScreen(
+                onLocationClick = { id ->
+                    navController.navigate("detail/$id")
+                },
+                onNavigateToSearch = {
+                    navController.navigate("search")
+                }
+            )
+        }
 
+        // DETAIL SCREEN
+        composable("detail/{id}") { backStackEntry ->
             val id = backStackEntry.arguments
                 ?.getString("id")?.toInt() ?: 0
 

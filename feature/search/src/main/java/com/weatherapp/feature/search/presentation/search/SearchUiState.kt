@@ -5,5 +5,6 @@ import com.weatherapp.feature.search.domain.model.CityWeather
 data class SearchUiState(
     val isLoading: Boolean = false,
     val results: List<CityWeather> = emptyList(),
+    val savedCityIds: Set<Int> = emptySet(),
     val error: String? = null
 )
